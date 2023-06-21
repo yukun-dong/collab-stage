@@ -35,11 +35,24 @@
     ],
     "actions": [
         {
-          "type": "Action.OpenUrl",
-          "title": "Link Unfurling Docs",
-          "url": "https://learn.microsoft.com/en-us/microsoftteams/platform/messaging-extensions/how-to/link-unfurling"
+            "type": "Action.Submit",
+            "title": "Open",
+            "data":{
+                "msteams": {
+                    "type": "invoke",
+                    "value": {
+                        "type": "tab/tabInfoAction",
+                        "tabInfo": {
+                            "contentUrl": "https://${url}/tab",
+                            "websiteUrl": "https://${url}/tab",
+                            "name": "test",
+                            "entityId": "entityId123123"
+                        }
+                    }
+                }
+            }
         }
       ],
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-    "version": "1.4"
+    "version": "1.5"
   }

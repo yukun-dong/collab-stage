@@ -6,13 +6,12 @@ import {
   AppBasedLinkQuery,
 } from "botbuilder";
 import helloWorldCard from "./adaptiveCards/helloWorldCard.json";
+import { AdaptiveCards } from "@microsoft/adaptivecards-tools";
 
 export class LinkUnfurlingApp extends TeamsActivityHandler {
-  constructor() {
-    super();
-  }
 
   // Link Unfurling.
+  // This function can be triggered after this app is installed to Teams.
   public async handleTeamsAppBasedLinkQuery(
     context: TurnContext,
     query: AppBasedLinkQuery
@@ -22,7 +21,12 @@ export class LinkUnfurlingApp extends TeamsActivityHandler {
       "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/icon.png",
     ]);
 
-    const attachment = { ...CardFactory.adaptiveCard(helloWorldCard), preview: previewCard };
+    const data = { url: process.env.BOT_DOMAIN, appId: process.env.TEAMS_APP_ID };
+
+    const renderedCard = AdaptiveCards.declare(helloWorldCard).render(data);
+
+    const attachment = { ...CardFactory.adaptiveCard(renderedCard), preview: previewCard };
+
 
     return {
       composeExtension: {
@@ -43,16 +47,22 @@ export class LinkUnfurlingApp extends TeamsActivityHandler {
   }
 
   // Zero Install Link Unfurling
+  // This function can be triggered if this app sets "supportsAnonymizedPayloads": true in manifest and is uploaded to org's app catalog.
   public async handleTeamsAnonymousAppBasedLinkQuery(
     context: TurnContext,
     query: AppBasedLinkQuery
   ): Promise<MessagingExtensionResponse> {
     // When the returned card is an adaptive card, the previewCard property of the attachment is required.
+    // add comments
     const previewCard = CardFactory.thumbnailCard("Preview Card", query.url, [
       "https://raw.githubusercontent.com/microsoft/botframework-sdk/master/icon.png",
     ]);
 
-    const attachment = { ...CardFactory.adaptiveCard(helloWorldCard), preview: previewCard };
+    const data = { url: process.env.BOT_DOMAIN, appId: process.env.TEAMS_APP_ID };
+
+    const renderedCard = AdaptiveCards.declare(helloWorldCard).render(data);
+
+    const attachment = { ...CardFactory.adaptiveCard(renderedCard), preview: previewCard };
 
     return {
       composeExtension: {
